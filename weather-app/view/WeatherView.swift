@@ -8,28 +8,17 @@
 import SwiftUI
 
 struct WeatherView: View {
-    @EnvironmentObject var weatherVM: WeatherVM
+    @Environment(WeatherVM.self) var weatherVM
 
     var body: some View {
-        VStack {
-//            if let weatherData = weatherVM.weatherData {
-//                Text("Weather Data Fetched")
-//                Text("Approved Time: \(weatherData.approvedTime)")
-//                Text("Reference Time: \(weatherData.referenceTime)")
-////                Text("Symbol: \(weatherData.timeSeries.first?.parameters.first?.values.first)")
-//            } else if let errorMessage = weatherVM.errorMessage {
-//                Text("Error: \(errorMessage)")
-//            } else {
-//                Text("Fetching Weather Data...")
-//            }
-        }
-        .onAppear {
-            weatherVM.fetchWeather()
-        }
+        VStack {}
+            .onAppear {
+                weatherVM.fetchWeather()
+            }
     }
 }
 
 #Preview {
     WeatherView()
-        .environmentObject(WeatherVM())
+        .environment(WeatherVM())
 }

@@ -7,9 +7,10 @@
 
 import Foundation
 
-class WeatherVM: ObservableObject {
-    private var weatherData: WeatherData?
-    @Published var errorMessage: String?
+@Observable
+class WeatherVM {
+    @ObservationIgnored private var weatherData: WeatherData?
+    var errorMessage: String?
 
     func fetchWeather() {
         WeatherNetworkService.fetchWeatherData { [weak self] result in

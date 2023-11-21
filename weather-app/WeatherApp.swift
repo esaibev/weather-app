@@ -9,12 +9,12 @@ import SwiftUI
 
 @main
 struct WeatherApp: App {
-    @StateObject private var weatherVM = WeatherVM()
+    @State private var weatherVM = WeatherVM()
 
     var body: some Scene {
         WindowGroup {
             WeatherView()
-                .environmentObject(weatherVM)
+                .environment(weatherVM)
         }
     }
 }
