@@ -35,6 +35,44 @@ struct WeatherData: Codable {
         let outfile = try fileURL()
         try data.write(to: outfile)
     }
+
+    func processDailyForecasts() -> [DailyForecast] {
+        guard !timeSeries.isEmpty else { return [] }
+
+        var dailyForecasts: [DailyForecast] = []
+
+        // Process the first time period
+        var currentDay = String(timeSeries.first!.validTime.prefix(10))
+        var maxTempForDay = timeSeries.first!.temperature
+        var symbolForDay = WeatherSymbol(rawValue: Int(timeSeries.first!.weatherSymbolValue)) ?? .clearSky
+
+        // Start processing from the second time period
+        for period in timeSeries.dropFirst() {
+            let date = String(period.validTime.prefix(10)) // Extract YYYY-MM-DD
+            let temp = period.temperature
+            let symbolValue = period.weatherSymbolValue
+            let symbol = WeatherSymbol(rawValue: Int(symbolValue)) ?? .clearSky
+
+            if date != currentDay {
+                // Append the forecast for the previous day
+                dailyForecasts.append(DailyForecast(date: currentDay, maxTemperature: maxTempForDay, symbol: symbolForDay))
+
+                // Reset for new day
+                currentDay = date
+                maxTempForDay = temp
+                symbolForDay = symbol
+            } else if temp > maxTempForDay {
+                // Update max temperature if higher
+                maxTempForDay = temp
+                symbolForDay = symbol
+            }
+        }
+
+        // Append the last day's forecast
+        dailyForecasts.append(DailyForecast(date: currentDay, maxTemperature: maxTempForDay, symbol: symbolForDay))
+
+        return dailyForecasts
+    }
 }
 
 // Represents the location of the weather data
@@ -116,4 +154,10 @@ enum WeatherSymbol: Int, Codable {
         default: return "questionmark"
         }
     }
+}
+
+struct DailyForecast {
+    let date: String
+    let maxTemperature: Double
+    let symbol: WeatherSymbol
 }
