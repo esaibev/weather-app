@@ -12,14 +12,12 @@ import Observation
 class WeatherVM {
     @ObservationIgnored private var weatherData: WeatherData?
     var errorMessage: String?
-    var approvedTime: String?
-    var dailyForecasts: [DailyForecast] = []
+    var forecast: Forecast?
 
     private func processForecasts() {
         guard let weatherData = weatherData else { return }
-        dailyForecasts = weatherData.processDailyForecasts()
-        approvedTime = weatherData.approvedTime
-        print(dailyForecasts)
+        forecast = weatherData.processForecasts()
+        print(forecast!)
     }
 
     func getWeather() async {

@@ -13,7 +13,10 @@ struct WeatherData: Codable {
     var referenceTime: String // Forecast start time
     var geometry: Geometry // Forecast location
     var timeSeries: [TimePeriod] // Array of time periods for the 7-day forecast
+}
 
+// Represents functions on weather data
+extension WeatherData {
     private static func fileURL() throws -> URL {
         try FileManager.default.url(for: .documentDirectory,
                                     in: .userDomainMask,
@@ -36,10 +39,10 @@ struct WeatherData: Codable {
         try data.write(to: outfile)
     }
 
-    func processDailyForecasts() -> [DailyForecast] {
-        guard !timeSeries.isEmpty else { return [] }
+    func processForecasts() -> Forecast {
+        guard !timeSeries.isEmpty else { return Forecast(approvedTime: formatDate(approvedTime), daily: []) }
 
-        var dailyForecasts: [DailyForecast] = []
+        var dailyForecasts: [Forecast.DailyForecast] = []
 
         // Process the first time period
         var currentDay = String(timeSeries.first!.validTime.prefix(10))
@@ -55,7 +58,7 @@ struct WeatherData: Codable {
 
             if date != currentDay {
                 // Append the forecast for the previous day
-                dailyForecasts.append(DailyForecast(date: currentDay, maxTemperature: maxTempForDay, symbol: symbolForDay))
+                dailyForecasts.append(Forecast.DailyForecast(date: currentDay, maxTemperature: maxTempForDay, symbol: symbolForDay))
 
                 // Reset for new day
                 currentDay = date
@@ -69,9 +72,24 @@ struct WeatherData: Codable {
         }
 
         // Append the last day's forecast
-        dailyForecasts.append(DailyForecast(date: currentDay, maxTemperature: maxTempForDay, symbol: symbolForDay))
+        dailyForecasts.append(Forecast.DailyForecast(date: currentDay, maxTemperature: maxTempForDay, symbol: symbolForDay))
 
-        return dailyForecasts
+        return Forecast(approvedTime: formatDate(approvedTime), daily: dailyForecasts)
+    }
+
+    private func formatDate(_ dateString: String) -> String {
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        inputFormatter.locale = Locale(identifier: "en_US_POSIX") // POSIX for fixed format
+
+        let outputFormatter = DateFormatter()
+        outputFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+
+        if let date = inputFormatter.date(from: dateString) {
+            return outputFormatter.string(from: date)
+        } else {
+            return dateString // Return original string if parsing fails
+        }
     }
 }
 
@@ -156,8 +174,13 @@ enum WeatherSymbol: Int, Codable {
     }
 }
 
-struct DailyForecast {
-    let date: String
-    let maxTemperature: Double
-    let symbol: WeatherSymbol
+struct Forecast {
+    var approvedTime: String
+    var daily: [DailyForecast]
+
+    struct DailyForecast {
+        let date: String
+        let maxTemperature: Double
+        let symbol: WeatherSymbol
+    }
 }
