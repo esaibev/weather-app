@@ -13,6 +13,28 @@ struct WeatherData: Codable {
     var referenceTime: String // Forecast start time
     var geometry: Geometry // Forecast location
     var timeSeries: [TimePeriod] // Array of time periods for the 7-day forecast
+
+    private static func fileURL() throws -> URL {
+        try FileManager.default.url(for: .documentDirectory,
+                                    in: .userDomainMask,
+                                    appropriateFor: nil,
+                                    create: false)
+            .appendingPathComponent("weatherData.data")
+    }
+
+    static func load() async throws -> WeatherData {
+        let fileURL = try fileURL()
+        guard let data = try? Data(contentsOf: fileURL) else {
+            throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No data available"])
+        }
+        return try JSONDecoder().decode(WeatherData.self, from: data)
+    }
+
+    static func save(_ weatherData: WeatherData) async throws {
+        let data = try JSONEncoder().encode(weatherData)
+        let outfile = try fileURL()
+        try data.write(to: outfile)
+    }
 }
 
 // Represents the location of the weather data
