@@ -6,8 +6,21 @@
 //
 
 import Foundation
+import Network
 
 struct WeatherNetworkService {
+    static func isConnectedToInternet(completion: @escaping (Bool) -> Void) {
+        let monitor = NWPathMonitor()
+        monitor.pathUpdateHandler = { path in
+            let isConnected = path.status == .satisfied
+            completion(isConnected)
+            monitor.cancel()
+        }
+
+        let queue = DispatchQueue(label: "NetworkMonitor")
+        monitor.start(queue: queue)
+    }
+    
     static func fetchWeatherData(completion: @escaping (Result<WeatherData, Error>) -> Void) {
         let urlString = "https://maceo.sth.kth.se/weather/forecast?lonLat=lon/14.333/lat/60.383"
         

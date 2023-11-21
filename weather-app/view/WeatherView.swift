@@ -12,20 +12,23 @@ struct WeatherView: View {
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
-        VStack {}
-//            .onAppear {
-//                weatherVM.fetchWeather()
-//            }
-            .task {
-                await weatherVM.loadWeatherData()
+        VStack {
+            if let errorMessage = weatherVM.errorMessage {
+                Text(errorMessage)
             }
-            .onChange(of: scenePhase) {
-                if scenePhase == .inactive {
-                    Task {
-                        await weatherVM.saveWeatherData()
-                    }
+            // Rest of view content
+            Text("Text")
+        }
+        .task {
+            await weatherVM.getWeather()
+        }
+        .onChange(of: scenePhase) {
+            if scenePhase == .inactive {
+                Task {
+                    await weatherVM.saveWeatherData()
                 }
             }
+        }
     }
 }
 
