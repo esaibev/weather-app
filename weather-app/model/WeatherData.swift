@@ -45,8 +45,18 @@ struct Geometry: Codable {
 
 // Represents each time period in the weather data
 struct TimePeriod: Codable {
-    var validTime: String /// Specific time for this data
+    var validTime: String // Specific time for this data
     var parameters: [WeatherParameter] // Array of different weather parameters
+}
+
+extension TimePeriod {
+    var temperature: Double {
+        parameters.first { $0.name == "t" }?.values.first ?? 0
+    }
+
+    var weatherSymbolValue: Double {
+        parameters.first { $0.name == "Wsymb2" }?.values.first ?? 0
+    }
 }
 
 // Represents each weather parameter
@@ -95,6 +105,15 @@ enum WeatherSymbol: Int, Codable {
         case .nearlyClearSky: return "Nearly clear sky"
         // TODO: Add descriptions for all cases
         default: return "Unknown"
+        }
+    }
+
+    var iconName: String {
+        switch self {
+        case .clearSky: return "sun.max"
+        case .lightRainShowers: return "cloud.drizzle"
+        // ... map other cases ...
+        default: return "questionmark"
         }
     }
 }

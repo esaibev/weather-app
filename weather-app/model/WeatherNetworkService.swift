@@ -56,13 +56,6 @@ struct WeatherNetworkService {
             let decoder = JSONDecoder()
             let weatherData = try decoder.decode(WeatherData.self, from: data)
             
-            // For testing: print weather parameter data
-            if let firstTimePeriod = weatherData.timeSeries.first {
-                for parameter in firstTimePeriod.parameters {
-                    print(parameter.name, parameter.values)
-                }
-            }
-            
             DispatchQueue.main.async {
                 completion(.success(weatherData))
             }
