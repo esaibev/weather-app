@@ -21,7 +21,7 @@ struct WeatherNetworkService {
         monitor.start(queue: queue)
     }
     
-    static func fetchWeatherData(completion: @escaping (Result<WeatherData, Error>) -> Void) {
+    static func fetchForecastData(completion: @escaping (Result<Forecast, Error>) -> Void) {
         let urlString = "https://maceo.sth.kth.se/weather/forecast?lonLat=lon/14.333/lat/60.383"
         
         guard let url = URL(string: urlString) else {
@@ -51,13 +51,14 @@ struct WeatherNetworkService {
         task.resume()
     }
     
-    private static func parseWeatherData(data: Data, completion: @escaping (Result<WeatherData, Error>) -> Void) {
+    private static func parseWeatherData(data: Data, completion: @escaping (Result<Forecast, Error>) -> Void) {
         do {
             let decoder = JSONDecoder()
             let weatherData = try decoder.decode(WeatherData.self, from: data)
+            let forecast = weatherData.process()
             
             DispatchQueue.main.async {
-                completion(.success(weatherData))
+                completion(.success(forecast))
             }
         } catch {
             // Handle parsing error

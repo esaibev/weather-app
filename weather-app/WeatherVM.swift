@@ -10,15 +10,8 @@ import Observation
 
 @Observable
 class WeatherVM {
-    @ObservationIgnored private var weatherData: WeatherData?
     var errorMessage: String?
     var forecast: Forecast?
-
-    private func processForecasts() {
-        guard let weatherData = weatherData else { return }
-        forecast = weatherData.process()
-        print(forecast!)
-    }
 
     func getWeather() async {
         WeatherNetworkService.isConnectedToInternet { isConnected in
@@ -36,17 +29,15 @@ class WeatherVM {
     }
 
     private func fetchNewWeather() {
-        WeatherNetworkService.fetchWeatherData { [weak self] result in
+        WeatherNetworkService.fetchForecastData { [weak self] result in
             switch result {
-            case .success(let data):
-                print("Weather fetch successful")
+            case .success(let forecast):
                 DispatchQueue.main.async {
-                    self?.weatherData = data
-                    self?.processForecasts()
-//                    print("\(self?.weatherData)")
+                    self?.forecast = forecast
+                    print("Forecast fetch successful")
                 }
             case .failure(let error):
-                print("Weather fetch failed")
+                print("Forecast fetch failed")
                 DispatchQueue.main.async {
                     self?.errorMessage = error.localizedDescription
                 }
