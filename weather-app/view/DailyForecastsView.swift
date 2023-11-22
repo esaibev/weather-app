@@ -16,9 +16,13 @@ struct DailyForecastsView: View {
                 Text(daily.date)
                 Spacer()
                 Image(systemName: daily.symbol.iconName)
+                    .imageScale(.large)
+                    .symbolRenderingMode(.palette)
+                    .foregroundStyle(.teal, .yellow)
                 Text("\(daily.maxTemperature, specifier: "%.1f") °C")
             }
-            .padding()
+            .padding([.top, .bottom], 8)
+            Divider()
         }
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 // Represents the weather data
 struct WeatherData: Codable {
@@ -44,55 +45,6 @@ struct WeatherParameter: Codable {
 
     enum CodingKeys: String, CodingKey {
         case name, values
-    }
-}
-
-// Enum for weather symbols (Wsymb2) with associated meanings
-enum WeatherSymbol: Int, Codable {
-    case clearSky = 1
-    case nearlyClearSky = 2
-    case variableCloudiness = 3
-    case halfclearSky = 4
-    case cloudySky = 5
-    case overcast = 6
-    case fog = 7
-    case lightRainShowers = 8
-    case moderateRainShowers = 9
-    case heavyRainShowers = 10
-    case thunderstorm = 11
-    case lightSleetShowers = 12
-    case moderateSleetShowers = 13
-    case heavySleetShowers = 14
-    case lightSnowShowers = 15
-    case moderateSnowShowers = 16
-    case heavySnowShowers = 17
-    case lightRain = 18
-    case moderateRain = 19
-    case heavyRain = 20
-    case thunder = 21
-    case lightSleet = 22
-    case moderateSleet = 23
-    case heavySleet = 24
-    case lightSnowfall = 25
-    case moderateSnowfall = 26
-    case heavySnowfall = 27
-
-    var description: String {
-        switch self {
-        case .clearSky: return "Clear sky"
-        case .nearlyClearSky: return "Nearly clear sky"
-        // TODO: Add descriptions for all cases
-        default: return "Unknown"
-        }
-    }
-
-    var iconName: String {
-        switch self {
-        case .clearSky: return "sun.max"
-        case .lightRainShowers: return "cloud.drizzle"
-        // ... map other cases ...
-        default: return "questionmark"
-        }
     }
 }
 
