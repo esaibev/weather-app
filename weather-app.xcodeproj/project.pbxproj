@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		663E02B62B0E34F000B4D011 /* DailyForecastsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663E02B52B0E34F000B4D011 /* DailyForecastsView.swift */; };
 		669430E72B0B793A0063EA98 /* WeatherApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 669430E62B0B793A0063EA98 /* WeatherApp.swift */; };
 		669430E92B0B793A0063EA98 /* WeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 669430E82B0B793A0063EA98 /* WeatherView.swift */; };
 		669430EB2B0B793B0063EA98 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 669430EA2B0B793B0063EA98 /* Assets.xcassets */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		663E02B52B0E34F000B4D011 /* DailyForecastsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyForecastsView.swift; sourceTree = "<group>"; };
 		669430E32B0B793A0063EA98 /* weather-app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "weather-app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		669430E62B0B793A0063EA98 /* WeatherApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherApp.swift; sourceTree = "<group>"; };
 		669430E82B0B793A0063EA98 /* WeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherView.swift; sourceTree = "<group>"; };
@@ -81,6 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				669430E82B0B793A0063EA98 /* WeatherView.swift */,
+				663E02B52B0E34F000B4D011 /* DailyForecastsView.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -166,6 +169,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				669430E92B0B793A0063EA98 /* WeatherView.swift in Sources */,
+				663E02B62B0E34F000B4D011 /* DailyForecastsView.swift in Sources */,
 				669431152B0BC8DF0063EA98 /* WeatherNetworkService.swift in Sources */,
 				669431132B0BB5970063EA98 /* WeatherData.swift in Sources */,
 				669430E72B0B793A0063EA98 /* WeatherApp.swift in Sources */,

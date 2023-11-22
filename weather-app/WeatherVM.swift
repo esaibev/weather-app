@@ -64,4 +64,10 @@ class WeatherVM {
             print("Failed to load forecast data")
         }
     }
+
+    /// Only used for previews
+    convenience init(sampleData: Forecast) {
+        self.init()
+        self.forecast = sampleData
+    }
 }
