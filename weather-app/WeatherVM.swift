@@ -16,7 +16,7 @@ class WeatherVM {
 
     private func processForecasts() {
         guard let weatherData = weatherData else { return }
-        forecast = weatherData.processForecasts()
+        forecast = weatherData.process()
         print(forecast!)
     }
 
@@ -27,7 +27,7 @@ class WeatherVM {
                     self.fetchNewWeather()
                 } else {
                     Task {
-                        await self.loadWeatherData()
+                        await self.loadForecast()
                         self.errorMessage = "No internet connection. Using saved data."
                     }
                 }
@@ -54,38 +54,25 @@ class WeatherVM {
         }
     }
 
-    func saveWeatherData() async {
-        guard let weatherData = weatherData else { return }
+    func saveForecast() async {
+        guard let forecast = forecast else { return }
         do {
-            try await WeatherData.save(weatherData)
-            print("Weather data saved")
+            try await Forecast.save(forecast)
+            print("Forecast data saved")
         } catch {
             errorMessage = error.localizedDescription
-            print("Weather data not saved")
+            print("Forecast data not saved")
         }
     }
 
-    func loadWeatherData() async {
+    func loadForecast() async {
         do {
-            weatherData = try await WeatherData.load()
-            if weatherData != nil {
-                print("Weather data loaded successfully")
-                processForecasts()
-            } else {
-                print("No weather data available")
-            }
+            forecast = try await Forecast.load()
+            print("Forecast data loaded successfully")
+            print(forecast!)
         } catch {
             errorMessage = error.localizedDescription
-
-            // For testing: Save some sample data if loading fails
-            weatherData = WeatherData(approvedTime: "2023-11-20T13:00:00Z",
-                                      referenceTime: "2023-11-20T13:00:00Z",
-                                      geometry: Geometry(type: "Point", coordinates: [[14.333, 60.383]]),
-                                      timeSeries: [])
-            Task {
-                await saveWeatherData()
-                print("Sample weather data saved.")
-            }
+            print("Failed to load forecast data")
         }
     }
 }

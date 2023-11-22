@@ -14,6 +14,7 @@
 		669431132B0BB5970063EA98 /* WeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 669431122B0BB5970063EA98 /* WeatherData.swift */; };
 		669431152B0BC8DF0063EA98 /* WeatherNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 669431142B0BC8DF0063EA98 /* WeatherNetworkService.swift */; };
 		669431172B0BCF220063EA98 /* WeatherVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 669431162B0BCF220063EA98 /* WeatherVM.swift */; };
+		66A6749A2B0DFBF0008FBEB8 /* Forecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66A674992B0DFBF0008FBEB8 /* Forecast.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,6 +26,7 @@
 		669431122B0BB5970063EA98 /* WeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherData.swift; sourceTree = "<group>"; };
 		669431142B0BC8DF0063EA98 /* WeatherNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherNetworkService.swift; sourceTree = "<group>"; };
 		669431162B0BCF220063EA98 /* WeatherVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherVM.swift; sourceTree = "<group>"; };
+		66A674992B0DFBF0008FBEB8 /* Forecast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Forecast.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +90,7 @@
 			children = (
 				669431122B0BB5970063EA98 /* WeatherData.swift */,
 				669431142B0BC8DF0063EA98 /* WeatherNetworkService.swift */,
+				66A674992B0DFBF0008FBEB8 /* Forecast.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -166,6 +169,7 @@
 				669431152B0BC8DF0063EA98 /* WeatherNetworkService.swift in Sources */,
 				669431132B0BB5970063EA98 /* WeatherData.swift in Sources */,
 				669430E72B0B793A0063EA98 /* WeatherApp.swift in Sources */,
+				66A6749A2B0DFBF0008FBEB8 /* Forecast.swift in Sources */,
 				669431172B0BCF220063EA98 /* WeatherVM.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

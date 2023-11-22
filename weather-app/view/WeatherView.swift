@@ -25,7 +25,7 @@ struct WeatherView: View {
         .onChange(of: scenePhase) {
             if scenePhase == .inactive {
                 Task {
-                    await weatherVM.saveWeatherData()
+                    await weatherVM.saveForecast()
                 }
             }
         }
