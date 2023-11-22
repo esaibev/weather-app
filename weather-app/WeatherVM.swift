@@ -11,7 +11,7 @@ import Observation
 @Observable
 class WeatherVM {
     var errorMessage: String?
-    var forecast: Forecast?
+    var forecast: Forecast = .init(approvedTime: "", daily: [])
 
     func getWeather() async {
         WeatherNetworkService.isConnectedToInternet { isConnected in
@@ -46,7 +46,6 @@ class WeatherVM {
     }
 
     func saveForecast() async {
-        guard let forecast = forecast else { return }
         do {
             try await Forecast.save(forecast)
             print("Forecast data saved")
@@ -60,7 +59,6 @@ class WeatherVM {
         do {
             forecast = try await Forecast.load()
             print("Forecast data loaded successfully")
-            print(forecast!)
         } catch {
             errorMessage = error.localizedDescription
             print("Failed to load forecast data")
