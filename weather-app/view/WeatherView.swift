@@ -12,15 +12,21 @@ struct WeatherView: View {
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
-        NavigationStack {
-            List {
+        ScrollView {
+            VStack(alignment: .leading) {
+                Text("Weather").font(.title).fontWeight(.heavy)
                 Text("Approved time: \(weatherVM.forecast.approvedTime)")
+                    .padding(.bottom)
                 VStack(alignment: .leading) {
                     DailyForecastsView()
                 }
             }
-            .navigationTitle("Weather")
         }
+        .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .edgesIgnoringSafeArea(.bottom)
+        .background(Color(red: 0.378, green: 0.49, blue: 0.757))
+        .preferredColorScheme(/*@START_MENU_TOKEN@*/ .dark/*@END_MENU_TOKEN@*/)
         .task {
             await weatherVM.getWeather()
         }

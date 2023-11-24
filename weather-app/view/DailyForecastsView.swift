@@ -11,19 +11,23 @@ struct DailyForecastsView: View {
     @Environment(WeatherVM.self) var weatherVM
 
     var body: some View {
-        ForEach(weatherVM.forecast.daily, id: \.date) { daily in
-            HStack {
-                Text(daily.date)
-                Spacer()
-                Image(systemName: daily.symbol.iconName)
-                    .imageScale(.large)
-                    .symbolRenderingMode(.palette)
-                    .foregroundStyle(.teal, .yellow)
-                Text("\(daily.maxTemperature, specifier: "%.1f") °C")
+        VStack {
+            ForEach(weatherVM.forecast.daily, id: \.date) { daily in
+                HStack {
+                    Text(daily.date)
+                    Spacer()
+                    Image(systemName: daily.symbol.iconName)
+                        .imageScale(.large)
+                        .symbolRenderingMode(.palette)
+                        .foregroundStyle(.teal, .yellow)
+                    Text("\(daily.maxTemperature, specifier: "%.1f") °C")
+                }
+                .padding(8)
+                Divider()
             }
-            .padding([.top, .bottom], 8)
-            Divider()
         }
+        .padding(10)
+        .background(Color(red: 0.468, green: 0.588, blue: 0.879), in: RoundedRectangle(cornerRadius: 16))
     }
 }
 
