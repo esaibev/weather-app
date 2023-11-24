@@ -12,7 +12,8 @@ struct DailyForecastsView: View {
 
     var body: some View {
         VStack {
-            ForEach(weatherVM.forecast.daily, id: \.date) { daily in
+            ForEach(weatherVM.forecast.daily.indices, id: \.self) { index in
+                let daily = weatherVM.forecast.daily[index]
                 HStack {
                     Text(daily.date)
                     Spacer()
@@ -23,7 +24,9 @@ struct DailyForecastsView: View {
                     Text("\(daily.maxTemperature, specifier: "%.1f") °C")
                 }
                 .padding(8)
-                Divider()
+                if index < weatherVM.forecast.daily.indices.last! {
+                    Divider()
+                }
             }
         }
         .padding(10)
