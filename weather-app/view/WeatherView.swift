@@ -35,8 +35,12 @@ struct WeatherView: View {
                     }
                     .frame(height: 40)
 
-                    Button("Submit") {}
-                        .buttonStyle(CustomButton())
+                    Button("Submit") {
+                        Task {
+                            await weatherVM.getWeatherForLocation(locationInput)
+                        }
+                    }
+                    .buttonStyle(CustomButton())
                 }
                 .padding(.bottom)
                 Text("Approved time: \(weatherVM.forecast.approvedTime)")
@@ -53,9 +57,9 @@ struct WeatherView: View {
         .edgesIgnoringSafeArea(.bottom)
         .background(Color(red: 0.378, green: 0.49, blue: 0.757))
         .preferredColorScheme(/*@START_MENU_TOKEN@*/ .dark/*@END_MENU_TOKEN@*/)
-        .task {
-            await weatherVM.getWeather()
-        }
+//        .task {
+//            await weatherVM.getWeather()
+//        }
         .onChange(of: scenePhase) {
             if scenePhase == .background {
                 Task {

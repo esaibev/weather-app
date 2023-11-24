@@ -13,6 +13,23 @@ class WeatherVM {
     var errorMessage: String?
     var forecast: Forecast = .init(approvedTime: "", daily: [])
 
+    func getWeatherForLocation(_ location: String) async {
+        do {
+            let coordinates = try await WeatherNetworkService.getCoordinates(for: location)
+            print(coordinates)
+            let forecast = try await WeatherNetworkService.getForecast(for: coordinates)
+            DispatchQueue.main.async {
+                self.forecast = forecast
+                print("Forecast fetch successful for coordinates")
+            }
+        } catch {
+            DispatchQueue.main.async {
+                self.errorMessage = error.localizedDescription
+                print("Error getting weather for location: \(error.localizedDescription)")
+            }
+        }
+    }
+
     func getWeather() async {
         WeatherNetworkService.isConnectedToInternet { isConnected in
             DispatchQueue.main.async {

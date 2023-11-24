@@ -8,8 +8,8 @@
 import Foundation
 
 struct Forecast: Codable {
-    var approvedTime: String
-    var daily: [Daily]
+    private(set) var approvedTime: String
+    private(set) var daily: [Daily]
 
     struct Daily: Codable, Identifiable {
         let id: UUID

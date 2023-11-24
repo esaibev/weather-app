@@ -8,7 +8,12 @@
 import Foundation
 import Network
 
-struct WeatherNetworkService {
+private struct GeocodeResult: Codable {
+    var lat: String
+    var lon: String
+}
+
+enum WeatherNetworkService {
     static func isConnectedToInternet(completion: @escaping (Bool) -> Void) {
         let monitor = NWPathMonitor()
         monitor.pathUpdateHandler = { path in
@@ -19,6 +24,44 @@ struct WeatherNetworkService {
 
         let queue = DispatchQueue(label: "NetworkMonitor")
         monitor.start(queue: queue)
+    }
+    
+    static func getCoordinates(for location: String) async throws -> Coordinates {
+        guard let encodedLocation = location.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let url = URL(string: "https://geocode.maps.co/search?q=\(encodedLocation)")
+        else {
+            throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
+        }
+
+        let (data, _) = try await URLSession.shared.data(from: url)
+        let decoder = JSONDecoder()
+        let results = try decoder.decode([GeocodeResult].self, from: data)
+
+        guard let firstResult = results.first,
+              var lat = Double(firstResult.lat),
+              var lon = Double(firstResult.lon)
+        else {
+            throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid data format"])
+        }
+        
+        // Efficiently round to 6 decimal places
+        lat = round(lat * 1_000_000) / 1_000_000
+        lon = round(lon * 1_000_000) / 1_000_000
+
+        let nr = lat.formatted(.number.precision(.fractionLength(6)))
+        return Coordinates(lat: lat, lon: lon)
+    }
+    
+    static func getForecast(for coordinates: Coordinates) async throws -> Forecast {
+        let urlString = "https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/\(coordinates.lon)/lat/\(coordinates.lat)/data.json"
+        guard let url = URL(string: urlString) else {
+            throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
+        }
+
+        let (data, _) = try await URLSession.shared.data(from: url)
+        let decoder = JSONDecoder()
+        let weatherData = try decoder.decode(WeatherData.self, from: data)
+        return weatherData.process()
     }
     
     static func fetchForecastData(completion: @escaping (Result<Forecast, Error>) -> Void) {

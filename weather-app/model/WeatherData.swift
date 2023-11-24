@@ -22,6 +22,12 @@ struct Geometry: Codable {
     var coordinates: [[Double]]
 }
 
+// Represents the coordinates
+struct Coordinates: Codable {
+    private(set) var lat: Double
+    private(set) var lon: Double
+}
+
 // Represents each time period in the weather data
 struct TimePeriod: Codable {
     var validTime: String // Specific time for this data
