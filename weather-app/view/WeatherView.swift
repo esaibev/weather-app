@@ -13,53 +13,56 @@ struct WeatherView: View {
     @State private var locationInput: String = ""
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading) {
-                Text("Weather").font(.largeTitle).fontWeight(/*@START_MENU_TOKEN@*/ .bold/*@END_MENU_TOKEN@*/)
-                HStack(spacing: 16) {
-                    ZStack(alignment: .leading) {
-                        Rectangle()
-                            .foregroundColor(.white)
-                            .cornerRadius(5)
+        VStack(spacing: 0) {
+            if !weatherVM.isConnected {
+                NoConnectionView()
+            }
 
-                        SuperTextField(
-                            placeholder: Text("Enter Location").foregroundColor(.gray),
-                            text: $locationInput
-                        )
-                        .padding(10)
+            ScrollView(showsIndicators: false) {
+                VStack(alignment: .leading) {
+                    Text("Weather").font(.largeTitle).fontWeight(.bold)
+                    HStack(spacing: 16) {
+                        ZStack(alignment: .leading) {
+                            Rectangle()
+                                .foregroundColor(.white)
+                                .cornerRadius(5)
+
+                            SuperTextField(
+                                placeholder: Text("Enter Location").foregroundColor(.gray),
+                                text: $locationInput
+                            )
+                            .padding(10)
+                            .frame(height: 40)
+                        }
                         .frame(height: 40)
 
-//                                            TextField("Enter Location", text: $locationInput)
-//                                                .foregroundColor(.black)
-//                                                .padding(10)
-                    }
-                    .frame(height: 40)
-
-                    Button("Submit") {
-                        Task {
-                            await weatherVM.getWeatherForLocation(locationInput)
+                        Button("Submit") {
+                            Task {
+                                await weatherVM.getWeatherForLocation(locationInput)
+                            }
                         }
+                        .buttonStyle(CustomButton())
                     }
-                    .buttonStyle(CustomButton())
-                }
-                .padding(.bottom)
-                Text("Approved time: \(weatherVM.forecast.approvedTime)")
-                    .padding(.bottom, 8)
+                    .padding(.bottom)
 
-                VStack(alignment: .leading) {
-                    DailyForecastsView()
+                    if weatherVM.hasData {
+                        Text("Approved time: \(weatherVM.forecast.approvedTime)")
+                            .padding(.bottom, 8)
+
+                        VStack(alignment: .leading) {
+                            DailyForecastsView()
+                        }
+                    } else {
+                        Text("No weather data exists")
+                    }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding()
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .padding()
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .edgesIgnoringSafeArea(.bottom)
+        .frame(maxWidth: .infinity)
         .background(Color(red: 0.378, green: 0.49, blue: 0.757))
         .preferredColorScheme(/*@START_MENU_TOKEN@*/ .dark/*@END_MENU_TOKEN@*/)
-//        .task {
-//            await weatherVM.getWeather()
-//        }
         .onChange(of: scenePhase) {
             if scenePhase == .background {
                 Task {
@@ -97,5 +100,5 @@ struct CustomButton: ButtonStyle {
 
 #Preview {
     WeatherView()
-        .environment(WeatherVM())
+        .environment(WeatherVM(sampleData: Forecast.sampleData))
 }

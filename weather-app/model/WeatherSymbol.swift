@@ -68,11 +68,4 @@ enum WeatherSymbol: Int, Codable {
         case .heavySnowfall: return "wind.snow"
         }
     }
-
-//    var image: Image {
-//        let symbolImage = Image(systemName: iconName)
-//        // Applying Palette rendering mode
-//        // Note: Not all symbols support multilayer rendering
-//        return symbolImage.renderingMode(.palette)
-//    }
 }

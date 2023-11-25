@@ -24,8 +24,8 @@ struct Geometry: Codable {
 
 // Represents the coordinates
 struct Coordinates: Codable {
-    private(set) var lat: Double
-    private(set) var lon: Double
+    var lat: Double
+    var lon: Double
 }
 
 // Represents each time period in the weather data
@@ -56,8 +56,8 @@ struct WeatherParameter: Codable {
 
 // Represents functions on WeatherData
 extension WeatherData {
-    func process() -> Forecast {
-        guard !timeSeries.isEmpty else { return Forecast(approvedTime: formatDate(approvedTime), daily: []) }
+    func process(with locationInput: String) -> Forecast {
+        guard !timeSeries.isEmpty else { return Forecast(approvedTime: formatDate(approvedTime), locationInput: "", coordinates: Coordinates(lat: 59.33, lon: 18.07), daily: []) }
 
         var dailyForecasts: [Forecast.Daily] = []
 
@@ -91,7 +91,10 @@ extension WeatherData {
         // Append the last day's forecast
         dailyForecasts.append(Forecast.Daily(date: currentDay, maxTemperature: maxTempForDay, symbol: symbolForDay))
 
-        return Forecast(approvedTime: formatDate(approvedTime), daily: dailyForecasts)
+        let coordinates = geometry.coordinates.first.map { Coordinates(lat: $0[1], lon: $0[0]) }
+            ?? Coordinates(lat: 59.33, lon: 18.07) // Fallback coordinates for Stockholm if not found
+
+        return Forecast(approvedTime: formatDate(approvedTime), locationInput: locationInput, coordinates: coordinates, daily: dailyForecasts)
     }
 
     private func formatDate(_ dateString: String) -> String {

@@ -11,14 +11,30 @@ import Observation
 @Observable
 class WeatherVM {
     var errorMessage: String?
-    var forecast: Forecast = .init(approvedTime: "", daily: [])
+    var forecast: Forecast = .init(approvedTime: "", locationInput: "", coordinates: Coordinates(lat: 59.33, lon: 18.07), daily: [])
+    var isConnected = false
+    var hasData = false
+
+    init() {
+        Task {
+            self.isConnected = await WeatherNetworkService.isConnectedToInternet()
+            if await loadForecast() {
+                self.hasData = true
+                if isConnected {
+                    let coordinates = forecast.coordinates
+                    await getWeatherAtCoordinates(coordinates)
+                }
+            }
+        }
+    }
 
     func getWeatherForLocation(_ location: String) async {
         do {
             let coordinates = try await WeatherNetworkService.getCoordinates(for: location)
             print(coordinates)
-            let forecast = try await WeatherNetworkService.getForecast(for: coordinates)
+            let forecast = try await WeatherNetworkService.getForecast(for: coordinates, locationInput: location)
             DispatchQueue.main.async {
+                self.hasData = true
                 self.forecast = forecast
                 print("Forecast fetch successful for coordinates")
             }
@@ -30,34 +46,18 @@ class WeatherVM {
         }
     }
 
-    func getWeather() async {
-        WeatherNetworkService.isConnectedToInternet { isConnected in
+    private func getWeatherAtCoordinates(_ coordinates: Coordinates) async {
+        do {
+            let forecast = try await WeatherNetworkService.getForecast(for: coordinates, locationInput: forecast.locationInput)
             DispatchQueue.main.async {
-                if isConnected {
-                    self.fetchNewWeather()
-                } else {
-                    Task {
-                        await self.loadForecast()
-                        self.errorMessage = "No internet connection. Using saved data."
-                    }
-                }
+                self.hasData = true
+                self.forecast = forecast
+                print("Forecast fetch successful for coordinates")
             }
-        }
-    }
-
-    private func fetchNewWeather() {
-        WeatherNetworkService.fetchForecastData { [weak self] result in
-            switch result {
-            case .success(let forecast):
-                DispatchQueue.main.async {
-                    self?.forecast = forecast
-                    print("Forecast fetch successful")
-                }
-            case .failure(let error):
-                print("Forecast fetch failed")
-                DispatchQueue.main.async {
-                    self?.errorMessage = error.localizedDescription
-                }
+        } catch {
+            DispatchQueue.main.async {
+                self.errorMessage = error.localizedDescription
+                print("Error getting weather for location: \(error.localizedDescription)")
             }
         }
     }
@@ -72,13 +72,15 @@ class WeatherVM {
         }
     }
 
-    func loadForecast() async {
+    func loadForecast() async -> Bool {
         do {
             forecast = try await Forecast.load()
             print("Forecast data loaded successfully")
+            return true
         } catch {
             errorMessage = error.localizedDescription
             print("Failed to load forecast data")
+            return false
         }
     }
 

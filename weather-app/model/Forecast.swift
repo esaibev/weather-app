@@ -9,6 +9,8 @@ import Foundation
 
 struct Forecast: Codable {
     private(set) var approvedTime: String
+    private(set) var locationInput: String
+    private(set) var coordinates: Coordinates
     private(set) var daily: [Daily]
 
     struct Daily: Codable, Identifiable {
@@ -55,12 +57,19 @@ extension Forecast {
     static let sampleData: Forecast =
         .init(
             approvedTime: "2023-11-22 14:00",
+            locationInput: "Stockholm",
+            coordinates: Coordinates(lat: 59, lon: 18),
             daily: [
                 Daily(date: "2023-11-23", maxTemperature: 15.0, symbol: .clearSky),
                 Daily(date: "2023-11-24", maxTemperature: 17.0, symbol: .lightRainShowers),
                 Daily(date: "2023-11-25", maxTemperature: 10.0, symbol: .moderateRain),
                 Daily(date: "2023-11-26", maxTemperature: 12.0, symbol: .cloudySky),
                 Daily(date: "2023-11-27", maxTemperature: 16.0, symbol: .overcast),
+                Daily(date: "2023-11-28", maxTemperature: 10.0, symbol: .moderateRain),
+                Daily(date: "2023-11-29", maxTemperature: 12.0, symbol: .cloudySky),
+                Daily(date: "2023-11-30", maxTemperature: 16.0, symbol: .heavySnowfall),
+                Daily(date: "2023-11-31", maxTemperature: 12.0, symbol: .cloudySky),
+                Daily(date: "2023-11-32", maxTemperature: 16.0, symbol: .heavyRain),
             ]
         )
 }
