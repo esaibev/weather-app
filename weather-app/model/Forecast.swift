@@ -11,7 +11,22 @@ struct Forecast: Codable {
     private(set) var approvedTime: String
     private(set) var locationInput: String
     private(set) var coordinates: Coordinates
+    private(set) var hourly: [Hourly]
     private(set) var daily: [Daily]
+
+    struct Hourly: Codable, Identifiable {
+        let id: UUID
+        let time: String
+        let temperature: Double
+        let symbol: WeatherSymbol
+
+        init(id: UUID = UUID(), time: String, temperature: Double, symbol: WeatherSymbol) {
+            self.id = id
+            self.time = time
+            self.temperature = temperature
+            self.symbol = symbol
+        }
+    }
 
     struct Daily: Codable, Identifiable {
         let id: UUID
@@ -59,6 +74,18 @@ extension Forecast {
             approvedTime: "2023-11-22 14:00",
             locationInput: "Stockholm",
             coordinates: Coordinates(lat: 59, lon: 18),
+            hourly: [
+                Hourly(time: "13", temperature: 7.6, symbol: .fog),
+                Hourly(time: "14", temperature: 15.2, symbol: .heavySnowfall),
+                Hourly(time: "15", temperature: 12.1, symbol: .halfclearSky),
+                Hourly(time: "16", temperature: 18.4, symbol: .lightSnowfall),
+                Hourly(time: "17", temperature: 14.9, symbol: .thunder),
+                Hourly(time: "18", temperature: 11.7, symbol: .lightRain),
+                Hourly(time: "19", temperature: 8.4, symbol: .heavyRain),
+                Hourly(time: "20", temperature: 6.3, symbol: .nearlyClearSky),
+                Hourly(time: "21", temperature: 5.8, symbol: .moderateSnowfall),
+                Hourly(time: "22", temperature: -1.8, symbol: .moderateSleetShowers),
+            ],
             daily: [
                 Daily(date: "2023-11-23", maxTemperature: 15.0, symbol: .clearSky),
                 Daily(date: "2023-11-24", maxTemperature: 17.0, symbol: .lightRainShowers),

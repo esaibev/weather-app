@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  WeatherView.swift
 //  weather-app
 //
 //  Created by Esaias Bevegård on 2023-11-20.
@@ -36,12 +36,7 @@ struct WeatherView: View {
                         }
                         .frame(height: 40)
 
-                        Button("Submit") {
-                            Task {
-                                await weatherVM.getWeatherForLocation(locationInput)
-                            }
-                        }
-                        .buttonStyle(CustomButton())
+                        Button(action: { Task { await weatherVM.getWeatherForLocation(locationInput) } }) { SubmitButton() }
                     }
                     .padding(.bottom)
 
@@ -49,9 +44,9 @@ struct WeatherView: View {
                         Text("Approved time: \(weatherVM.forecast.approvedTime)")
                             .padding(.bottom, 8)
 
-                        VStack(alignment: .leading) {
-                            DailyForecastsView()
-                        }
+                        HourlyForecastView()
+                        DailyForecastView()
+
                     } else {
                         Text("No weather data exists")
                     }
@@ -88,9 +83,9 @@ struct SuperTextField: View {
     }
 }
 
-struct CustomButton: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
+struct SubmitButton: View {
+    var body: some View {
+        Text("Submit")
             .foregroundColor(.white)
             .padding([.horizontal, .vertical], 12)
             .background(.cyan)

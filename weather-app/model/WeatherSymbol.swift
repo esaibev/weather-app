@@ -44,7 +44,7 @@ enum WeatherSymbol: Int, Codable {
         case .variableCloudiness: return "cloud.sun"
         case .halfclearSky: return "cloud.sun.fill"
         case .cloudySky: return "cloud"
-        case .overcast: return "smoke.fill" // Not exact match, using smoke as second best
+        case .overcast: return "smoke.fill"
         case .fog: return "cloud.fog"
         case .lightRainShowers: return "cloud.drizzle"
         case .moderateRainShowers: return "cloud.rain"

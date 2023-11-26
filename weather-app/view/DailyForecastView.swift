@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DailyForecastsView: View {
+struct DailyForecastView: View {
     @Environment(WeatherVM.self) var weatherVM
 
     var body: some View {
@@ -21,11 +21,12 @@ struct DailyForecastsView: View {
                         .imageScale(.large)
                         .symbolRenderingMode(.palette)
                         .foregroundStyle(.teal, .yellow)
-                    Text("\(daily.maxTemperature, specifier: "%.1f") °C")
+                    Text("\(daily.maxTemperature, specifier: "%.1f")°")
                 }
                 .padding(8)
                 if index < weatherVM.forecast.daily.indices.last! {
                     Divider()
+                        .padding(.horizontal, 8)
                 }
             }
         }
@@ -35,6 +36,6 @@ struct DailyForecastsView: View {
 }
 
 #Preview {
-    DailyForecastsView()
+    DailyForecastView()
         .environment(WeatherVM(sampleData: Forecast.sampleData))
 }

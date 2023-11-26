@@ -11,7 +11,7 @@ import Observation
 @Observable
 class WeatherVM {
     var errorMessage: String?
-    var forecast: Forecast = .init(approvedTime: "", locationInput: "", coordinates: Coordinates(lat: 59.33, lon: 18.07), daily: [])
+    var forecast: Forecast = .init(approvedTime: "", locationInput: "", coordinates: Coordinates(lat: 59.33, lon: 18.07), hourly: [], daily: [])
     var isConnected = false
     var hasData = false
 
@@ -29,19 +29,22 @@ class WeatherVM {
     }
 
     func getWeatherForLocation(_ location: String) async {
-        do {
-            let coordinates = try await WeatherNetworkService.getCoordinates(for: location)
-            print(coordinates)
-            let forecast = try await WeatherNetworkService.getForecast(for: coordinates, locationInput: location)
-            DispatchQueue.main.async {
-                self.hasData = true
-                self.forecast = forecast
-                print("Forecast fetch successful for coordinates")
-            }
-        } catch {
-            DispatchQueue.main.async {
-                self.errorMessage = error.localizedDescription
-                print("Error getting weather for location: \(error.localizedDescription)")
+        isConnected = await WeatherNetworkService.isConnectedToInternet()
+        if isConnected {
+            do {
+                let coordinates = try await WeatherNetworkService.getCoordinates(for: location)
+                print(coordinates)
+                let forecast = try await WeatherNetworkService.getForecast(for: coordinates, locationInput: location)
+                DispatchQueue.main.async {
+                    self.hasData = true
+                    self.forecast = forecast
+                    print("Forecast fetch successful for coordinates")
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    self.errorMessage = error.localizedDescription
+                    print("Error getting weather for location: \(error.localizedDescription)")
+                }
             }
         }
     }

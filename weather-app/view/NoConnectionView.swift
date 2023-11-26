@@ -1,5 +1,5 @@
 //
-//  NoConnectionNotificationView.swift
+//  NoConnectionView.swift
 //  weather-app
 //
 //  Created by Esaias Bevegård on 2023-11-25.

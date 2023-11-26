@@ -57,8 +57,35 @@ struct WeatherParameter: Codable {
 // Represents functions on WeatherData
 extension WeatherData {
     func process(with locationInput: String) -> Forecast {
-        guard !timeSeries.isEmpty else { return Forecast(approvedTime: formatDate(approvedTime), locationInput: "", coordinates: Coordinates(lat: 59.33, lon: 18.07), daily: []) }
+        guard !timeSeries.isEmpty else { return Forecast(approvedTime: formatDate(approvedTime), locationInput: "", coordinates: Coordinates(lat: 59.33, lon: 18.07), hourly: [], daily: []) }
 
+        let hourlyForecasts = processHourlyForecasts()
+        let dailyForecasts = processDailyForecasts()
+
+        let coordinates = geometry.coordinates.first.map { Coordinates(lat: $0[1], lon: $0[0]) }
+            ?? Coordinates(lat: 59.33, lon: 18.07) // Fallback coordinates for Stockholm if not found
+
+        return Forecast(approvedTime: formatDate(approvedTime), locationInput: locationInput, coordinates: coordinates, hourly: hourlyForecasts, daily: dailyForecasts)
+    }
+
+    private func processHourlyForecasts() -> [Forecast.Hourly] {
+        var hourlyForecasts: [Forecast.Hourly] = []
+
+        for period in timeSeries.prefix(24) {
+            let dateString = period.validTime
+
+            let time = String(dateString.split(separator: "T")[1].prefix(2)) // Extracts the "HH" part
+            let temperature = period.temperature
+            let symbol = WeatherSymbol(rawValue: Int(period.weatherSymbolValue)) ?? .clearSky
+
+            let hourlyForecast = Forecast.Hourly(time: time, temperature: temperature, symbol: symbol)
+            hourlyForecasts.append(hourlyForecast)
+        }
+
+        return hourlyForecasts
+    }
+
+    private func processDailyForecasts() -> [Forecast.Daily] {
         var dailyForecasts: [Forecast.Daily] = []
 
         // Process the first time period
@@ -91,10 +118,7 @@ extension WeatherData {
         // Append the last day's forecast
         dailyForecasts.append(Forecast.Daily(date: currentDay, maxTemperature: maxTempForDay, symbol: symbolForDay))
 
-        let coordinates = geometry.coordinates.first.map { Coordinates(lat: $0[1], lon: $0[0]) }
-            ?? Coordinates(lat: 59.33, lon: 18.07) // Fallback coordinates for Stockholm if not found
-
-        return Forecast(approvedTime: formatDate(approvedTime), locationInput: locationInput, coordinates: coordinates, daily: dailyForecasts)
+        return dailyForecasts
     }
 
     private func formatDate(_ dateString: String) -> String {
