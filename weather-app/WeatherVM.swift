@@ -11,7 +11,8 @@ import Observation
 @Observable
 class WeatherVM {
     var errorMessage: String?
-    var forecast: Forecast = .init(approvedTime: "", locationInput: "", coordinates: Coordinates(lat: 59.33, lon: 18.07), hourly: [], daily: [])
+    var forecast: Forecast = .init(approvedTime: "", locationInput: "", coordinates: Coordinates(lat: 59.33, lon: 18.07), hourly: [], daily: [], isFavorite: false)
+    var favoriteForecasts: [Forecast] = []
     var isConnected = false
     var hasData = false
 
@@ -85,6 +86,15 @@ class WeatherVM {
             print("Failed to load forecast data")
             return false
         }
+    }
+
+    func toggleFavorite() {
+        if forecast.isFavorite(favoriteForecasts) {
+            forecast.removeFavorite(from: &favoriteForecasts)
+        } else {
+            self.forecast.addFavorite(to: &favoriteForecasts)
+        }
+        print("New setting: \(forecast.isFavorite)")
     }
 
     /// Only used for previews

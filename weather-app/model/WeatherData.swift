@@ -57,7 +57,7 @@ struct WeatherParameter: Codable {
 // Represents functions on WeatherData
 extension WeatherData {
     func process(with locationInput: String) -> Forecast {
-        guard !timeSeries.isEmpty else { return Forecast(approvedTime: formatDate(approvedTime), locationInput: "", coordinates: Coordinates(lat: 59.33, lon: 18.07), hourly: [], daily: []) }
+        guard !timeSeries.isEmpty else { return Forecast(approvedTime: formatDate(approvedTime), locationInput: "", coordinates: Coordinates(lat: 59.33, lon: 18.07), hourly: [], daily: [], isFavorite: false) }
 
         let hourlyForecasts = processHourlyForecasts()
         let dailyForecasts = processDailyForecasts()
@@ -65,7 +65,7 @@ extension WeatherData {
         let coordinates = geometry.coordinates.first.map { Coordinates(lat: $0[1], lon: $0[0]) }
             ?? Coordinates(lat: 59.33, lon: 18.07) // Fallback coordinates for Stockholm if not found
 
-        return Forecast(approvedTime: formatDate(approvedTime), locationInput: locationInput, coordinates: coordinates, hourly: hourlyForecasts, daily: dailyForecasts)
+        return Forecast(approvedTime: formatDate(approvedTime), locationInput: locationInput, coordinates: coordinates, hourly: hourlyForecasts, daily: dailyForecasts, isFavorite: false)
     }
 
     private func processHourlyForecasts() -> [Forecast.Hourly] {

@@ -41,6 +41,16 @@ struct WeatherView: View {
                     .padding(.bottom)
 
                     if weatherVM.hasData {
+                        HStack {
+                            Text("Location: \(weatherVM.forecast.locationInput)")
+                            Button(action: {
+                                weatherVM.toggleFavorite()
+                            }) {
+                                Image(systemName: weatherVM.forecast.isFavorite ? "star.fill" : "star")
+                                    .foregroundColor(.yellow)
+                                    .opacity(weatherVM.forecast.isFavorite ? 1 : 0.5)
+                            }
+                        }
                         Text("Approved time: \(weatherVM.forecast.approvedTime)")
                             .padding(.bottom, 8)
 

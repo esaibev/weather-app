@@ -8,11 +8,13 @@
 import Foundation
 
 struct Forecast: Codable {
+    private(set) var id: UUID = .init()
     private(set) var approvedTime: String
     private(set) var locationInput: String
     private(set) var coordinates: Coordinates
     private(set) var hourly: [Hourly]
     private(set) var daily: [Daily]
+    private(set) var isFavorite: Bool
 
     struct Hourly: Codable, Identifiable {
         let id: UUID
@@ -43,7 +45,7 @@ struct Forecast: Codable {
     }
 }
 
-// Represents functions on Forecast
+// Represents persistency functions on Forecast
 extension Forecast {
     private static func fileURL() throws -> URL {
         try FileManager.default.url(for: .documentDirectory,
@@ -65,6 +67,25 @@ extension Forecast {
         let data = try JSONEncoder().encode(forecast)
         let outfile = try fileURL()
         try data.write(to: outfile)
+    }
+}
+
+// Represents functions on toggling favorite forecasts
+extension Forecast {
+    func isFavorite(_ favorites: [Forecast]) -> Bool {
+        favorites.contains(where: { $0.id == self.id })
+    }
+
+    mutating func removeFavorite(from favorites: inout [Forecast]) {
+        if let index = favorites.firstIndex(where: { $0.id == self.id }) {
+            self.isFavorite = false
+            favorites.remove(at: index)
+        }
+    }
+
+    mutating func addFavorite(to favorites: inout [Forecast]) {
+        self.isFavorite = true
+        favorites.append(self)
     }
 }
 
@@ -97,6 +118,7 @@ extension Forecast {
                 Daily(date: "2023-11-30", maxTemperature: 16.0, symbol: .heavySnowfall),
                 Daily(date: "2023-11-31", maxTemperature: 12.0, symbol: .cloudySky),
                 Daily(date: "2023-11-32", maxTemperature: 16.0, symbol: .heavyRain),
-            ]
+            ],
+            isFavorite: false
         )
 }
