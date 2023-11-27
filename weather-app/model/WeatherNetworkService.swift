@@ -54,7 +54,7 @@ enum WeatherNetworkService {
     }
 
     static func getForecast(for coordinates: Coordinates, locationInput: String) async throws -> Forecast {
-        let urlStringTest = "https://maceo.sth.kth.se/weather/forecast?lonLat=lon/14.333/lat/60.383"
+//        let urlStringTest = "https://maceo.sth.kth.se/weather/forecast?lonLat=lon/14.333/lat/60.383"
         let urlString = "https://opendata-download-metfcst.smhi.se/api/category/pmp3g/version/2/geotype/point/lon/\(coordinates.lon)/lat/\(coordinates.lat)/data.json"
         guard let url = URL(string: urlString) else {
             throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])

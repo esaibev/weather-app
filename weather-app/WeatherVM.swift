@@ -39,7 +39,8 @@ class WeatherVM {
                 DispatchQueue.main.async {
                     self.hasData = true
                     self.forecast = forecast
-                    self.updateFavoriteStatusOfFetchedForecast()
+                    self.updateFavoriteStatusOfForecast()
+//                    print("Status in getWeather: \(forecast.isFavorite)")
                     print("Forecast fetch successful for coordinates")
                 }
             } catch {
@@ -57,6 +58,8 @@ class WeatherVM {
             DispatchQueue.main.async {
                 self.hasData = true
                 self.forecast = forecast
+                self.updateFavoriteStatusOfForecast()
+//                print("Status in getWeatherAtCoordinates: \(forecast.isFavorite)")
                 print("Forecast fetch successful for coordinates")
             }
         } catch {
@@ -80,6 +83,15 @@ class WeatherVM {
     func loadForecast() async -> Bool {
         do {
             forecast = try await Forecast.load()
+            favoriteForecasts = try await Forecast.loadFavorites()
+
+            for forecast in favoriteForecasts {
+                print(forecast.locationInput)
+            }
+
+            updateFavoriteStatusOfForecast()
+//            print("Status in loadForecast: \(forecast.isFavorite)")
+
             print("Forecast data loaded successfully")
             return true
         } catch {
@@ -96,11 +108,25 @@ class WeatherVM {
             forecast.addFavorite(to: &favoriteForecasts)
         }
         print(favoriteForecasts.count)
+        print("--")
+        for forecast in favoriteForecasts {
+            print(forecast.locationInput)
+        }
     }
 
-    func updateFavoriteStatusOfFetchedForecast() {
+    func updateFavoriteStatusOfForecast() {
         if forecast.isFavorite(favoriteForecasts) {
             forecast.setFavorite()
+        }
+        print("Status: \(forecast.isFavorite)")
+    }
+
+    func saveFavorites() async {
+        do {
+            try await Forecast.saveFavorites(favoriteForecasts)
+            print("Favorite forecasts saved")
+        } catch {
+            print("Failed to save favorite forecasts: \(error)")
         }
     }
 

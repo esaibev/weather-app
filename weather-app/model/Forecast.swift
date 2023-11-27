@@ -44,14 +44,14 @@ struct Forecast: Codable {
     }
 }
 
-// Represents persistency functions on Forecast
+// Represents persistency functions on active forecast
 extension Forecast {
     private static func fileURL() throws -> URL {
         try FileManager.default.url(for: .documentDirectory,
                                     in: .userDomainMask,
                                     appropriateFor: nil,
                                     create: false)
-            .appendingPathComponent("forecastData.data")
+            .appendingPathComponent("forecast.data")
     }
 
     static func load() async throws -> Forecast {
@@ -69,7 +69,32 @@ extension Forecast {
     }
 }
 
-// Represents functions on toggling favorite forecasts
+// Represents persistency functions on favorite forecasts
+extension Forecast {
+    private static func favoritesFileURL() throws -> URL {
+        try FileManager.default.url(for: .documentDirectory,
+                                    in: .userDomainMask,
+                                    appropriateFor: nil,
+                                    create: false)
+            .appendingPathComponent("favoriteForecasts.data")
+    }
+
+    static func loadFavorites() async throws -> [Forecast] {
+        let fileURL = try favoritesFileURL()
+        guard let data = try? Data(contentsOf: fileURL) else {
+            throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No favorite data available"])
+        }
+        return try JSONDecoder().decode([Forecast].self, from: data)
+    }
+
+    static func saveFavorites(_ favorites: [Forecast]) async throws {
+        let data = try JSONEncoder().encode(favorites)
+        let outfile = try favoritesFileURL()
+        try data.write(to: outfile)
+    }
+}
+
+// Represents functions on toggling the favorite status on forecasts
 extension Forecast {
     func isFavorite(_ favorites: [Forecast]) -> Bool {
         favorites.contains(where: { $0.locationInput.lowercased() == self.locationInput.lowercased() })
