@@ -8,7 +8,6 @@
 import Foundation
 
 struct Forecast: Codable {
-    private(set) var id: UUID = .init()
     private(set) var approvedTime: String
     private(set) var locationInput: String
     private(set) var coordinates: Coordinates
@@ -73,11 +72,11 @@ extension Forecast {
 // Represents functions on toggling favorite forecasts
 extension Forecast {
     func isFavorite(_ favorites: [Forecast]) -> Bool {
-        favorites.contains(where: { $0.id == self.id })
+        favorites.contains(where: { $0.locationInput.lowercased() == self.locationInput.lowercased() })
     }
 
     mutating func removeFavorite(from favorites: inout [Forecast]) {
-        if let index = favorites.firstIndex(where: { $0.id == self.id }) {
+        if let index = favorites.firstIndex(where: { $0.locationInput.lowercased() == self.locationInput.lowercased() }) {
             self.isFavorite = false
             favorites.remove(at: index)
         }
@@ -86,6 +85,10 @@ extension Forecast {
     mutating func addFavorite(to favorites: inout [Forecast]) {
         self.isFavorite = true
         favorites.append(self)
+    }
+
+    mutating func setFavorite() {
+        self.isFavorite = true
     }
 }
 

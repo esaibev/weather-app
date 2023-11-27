@@ -39,6 +39,7 @@ class WeatherVM {
                 DispatchQueue.main.async {
                     self.hasData = true
                     self.forecast = forecast
+                    self.updateFavoriteStatusOfFetchedForecast()
                     print("Forecast fetch successful for coordinates")
                 }
             } catch {
@@ -92,9 +93,15 @@ class WeatherVM {
         if forecast.isFavorite(favoriteForecasts) {
             forecast.removeFavorite(from: &favoriteForecasts)
         } else {
-            self.forecast.addFavorite(to: &favoriteForecasts)
+            forecast.addFavorite(to: &favoriteForecasts)
         }
-        print("New setting: \(forecast.isFavorite)")
+        print(favoriteForecasts.count)
+    }
+
+    func updateFavoriteStatusOfFetchedForecast() {
+        if forecast.isFavorite(favoriteForecasts) {
+            forecast.setFavorite()
+        }
     }
 
     /// Only used for previews
