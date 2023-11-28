@@ -37,5 +37,5 @@ struct DailyForecastView: View {
 
 #Preview {
     DailyForecastView()
-        .environment(WeatherVM(sampleData: Forecast.sampleData))
+        .environment(WeatherVM(sampleData: Forecast.sampleData, sampleFavorites: Forecast.sampleFavorites))
 }

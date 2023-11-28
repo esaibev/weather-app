@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct Forecast: Codable {
+struct Forecast: Codable, Identifiable {
+    private(set) var id = UUID()
     private(set) var approvedTime: String
     private(set) var locationInput: String
     private(set) var coordinates: Coordinates
@@ -149,4 +150,21 @@ extension Forecast {
             ],
             isFavorite: false
         )
+
+    static var sampleFavorites: [Forecast] {
+        return [
+            Forecast(approvedTime: "2023-11-23 15:00", locationInput: "Stockholm", coordinates: Coordinates(lat: 59, lon: 18), hourly: [
+                Hourly(time: "15", temperature: 12.1, symbol: .halfclearSky),
+                Hourly(time: "16", temperature: 18.4, symbol: .lightSnowfall),
+            ], daily: [], isFavorite: true),
+            Forecast(approvedTime: "2023-11-23 16:00", locationInput: "Kalmar", coordinates: Coordinates(lat: 60, lon: 19), hourly: [
+                Hourly(time: "16", temperature: 18.4, symbol: .heavyRain),
+                Hourly(time: "17", temperature: 14.9, symbol: .thunder),
+            ], daily: [], isFavorite: true),
+            Forecast(approvedTime: "2023-11-23 17:00", locationInput: "Öland", coordinates: Coordinates(lat: 60, lon: 19), hourly: [
+                Hourly(time: "17", temperature: 14.9, symbol: .heavySnowfall),
+                Hourly(time: "18", temperature: 11.7, symbol: .lightRain),
+            ], daily: [], isFavorite: true),
+        ]
+    }
 }

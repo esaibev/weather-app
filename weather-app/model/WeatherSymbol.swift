@@ -37,6 +37,38 @@ enum WeatherSymbol: Int, Codable {
     case moderateSnowfall = 26
     case heavySnowfall = 27
 
+    var description: String {
+        switch self {
+        case .clearSky: return "Clear Sky"
+        case .nearlyClearSky: return "Nearly Clear Sky"
+        case .variableCloudiness: return "Variable Cloudiness"
+        case .halfclearSky: return "Partly Cloudy"
+        case .cloudySky: return "Cloudy Sky"
+        case .overcast: return "Overcast"
+        case .fog: return "Fog"
+        case .lightRainShowers: return "Light Rain Showers"
+        case .moderateRainShowers: return "Moderate Rain Showers"
+        case .heavyRainShowers: return "Heavy Rain Showers"
+        case .thunderstorm: return "Thunderstorm"
+        case .lightSleetShowers: return "Light Sleet Showers"
+        case .moderateSleetShowers: return "Moderate Sleet Showers"
+        case .heavySleetShowers: return "Heavy Sleet Showers"
+        case .lightSnowShowers: return "Light Snow Showers"
+        case .moderateSnowShowers: return "Moderate Snow Showers"
+        case .heavySnowShowers: return "Heavy Snow Showers"
+        case .lightRain: return "Light Rain"
+        case .moderateRain: return "Moderate Rain"
+        case .heavyRain: return "Heavy Rain"
+        case .thunder: return "Thunder"
+        case .lightSleet: return "Light Sleet"
+        case .moderateSleet: return "Moderate Sleet"
+        case .heavySleet: return "Heavy Sleet"
+        case .lightSnowfall: return "Light Snowfall"
+        case .moderateSnowfall: return "Moderate Snowfall"
+        case .heavySnowfall: return "Heavy Snowfall"
+        }
+    }
+
     var iconName: String {
         switch self {
         case .clearSky: return "sun.max"

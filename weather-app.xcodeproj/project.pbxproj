@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		662617512B15FE8100CB28C1 /* FavoriteForecastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 662617502B15FE8100CB28C1 /* FavoriteForecastView.swift */; };
 		663E02B62B0E34F000B4D011 /* DailyForecastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663E02B52B0E34F000B4D011 /* DailyForecastView.swift */; };
 		663E02B82B0E5DD500B4D011 /* WeatherSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663E02B72B0E5DD500B4D011 /* WeatherSymbol.swift */; };
 		66718A652B13533F007AC40A /* HourlyForecastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66718A642B13533F007AC40A /* HourlyForecastView.swift */; };
@@ -24,6 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		662617502B15FE8100CB28C1 /* FavoriteForecastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteForecastView.swift; sourceTree = "<group>"; };
 		663E02B52B0E34F000B4D011 /* DailyForecastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyForecastView.swift; sourceTree = "<group>"; };
 		663E02B72B0E5DD500B4D011 /* WeatherSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherSymbol.swift; sourceTree = "<group>"; };
 		66718A642B13533F007AC40A /* HourlyForecastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyForecastView.swift; sourceTree = "<group>"; };
@@ -98,6 +100,7 @@
 				66718A642B13533F007AC40A /* HourlyForecastView.swift */,
 				66ED77B82B14A83300615E9F /* ContentView.swift */,
 				66ED77BA2B14AA7E00615E9F /* FavoritesView.swift */,
+				662617502B15FE8100CB28C1 /* FavoriteForecastView.swift */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -187,6 +190,7 @@
 				66ED77B92B14A83300615E9F /* ContentView.swift in Sources */,
 				669430E92B0B793A0063EA98 /* WeatherView.swift in Sources */,
 				663E02B62B0E34F000B4D011 /* DailyForecastView.swift in Sources */,
+				662617512B15FE8100CB28C1 /* FavoriteForecastView.swift in Sources */,
 				669431152B0BC8DF0063EA98 /* WeatherNetworkService.swift in Sources */,
 				669431132B0BB5970063EA98 /* WeatherData.swift in Sources */,
 				663E02B82B0E5DD500B4D011 /* WeatherSymbol.swift in Sources */,

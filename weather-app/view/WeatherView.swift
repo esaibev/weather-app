@@ -49,13 +49,6 @@ struct WeatherView: View {
                                     .foregroundColor(.yellow)
                                     .opacity(weatherVM.forecast.isFavorite ? 1 : 0.5)
                             }
-
-//                            Button(action: { Task { await weatherVM.toggleFavorite() }
-//                            }) {
-//                                Image(systemName: weatherVM.forecast.isFavorite ? "star.fill" : "star")
-//                                    .foregroundColor(.yellow)
-//                                    .opacity(weatherVM.forecast.isFavorite ? 1 : 0.5)
-//                            }
                         }
                         Text("Approved time: \(weatherVM.forecast.approvedTime)")
                             .padding(.bottom, 8)
@@ -112,5 +105,5 @@ struct SubmitButton: View {
 
 #Preview {
     WeatherView()
-        .environment(WeatherVM(sampleData: Forecast.sampleData))
+        .environment(WeatherVM(sampleData: Forecast.sampleData, sampleFavorites: Forecast.sampleFavorites))
 }
