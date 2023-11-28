@@ -116,6 +116,12 @@ extension Forecast {
     mutating func setFavorite() {
         self.isFavorite = true
     }
+
+    func updateSelfInFavorites(_ favorites: inout [Forecast]) {
+        if let index = favorites.firstIndex(where: { $0.locationInput.lowercased() == self.locationInput.lowercased() }) {
+            favorites[index] = self
+        }
+    }
 }
 
 extension Forecast {

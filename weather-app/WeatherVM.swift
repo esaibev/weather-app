@@ -34,14 +34,9 @@ class WeatherVM {
         if isConnected {
             do {
                 let coordinates = try await WeatherNetworkService.getCoordinates(for: location)
-                print(coordinates)
                 let forecast = try await WeatherNetworkService.getForecast(for: coordinates, locationInput: location)
-                DispatchQueue.main.async {
-                    self.hasData = true
-                    self.forecast = forecast
-                    self.updateFavoriteStatusOfForecast()
-                    print("Forecast fetch successful for coordinates")
-                }
+                updateForecast(forecast)
+                print("Forecast fetch successful for coordinates")
             } catch {
                 DispatchQueue.main.async {
                     self.errorMessage = error.localizedDescription
@@ -54,12 +49,8 @@ class WeatherVM {
     private func getWeatherAtCoordinates(_ coordinates: Coordinates) async {
         do {
             let forecast = try await WeatherNetworkService.getForecast(for: coordinates, locationInput: forecast.locationInput)
-            DispatchQueue.main.async {
-                self.hasData = true
-                self.forecast = forecast
-                self.updateFavoriteStatusOfForecast()
-                print("Forecast fetch successful for coordinates")
-            }
+            updateForecast(forecast)
+            print("Forecast fetch successful for coordinates")
         } catch {
             DispatchQueue.main.async {
                 self.errorMessage = error.localizedDescription
@@ -73,18 +64,23 @@ class WeatherVM {
         if isConnected {
             do {
                 let forecast = try await WeatherNetworkService.getForecast(for: forecast.coordinates, locationInput: forecast.locationInput)
-                DispatchQueue.main.async {
-                    self.hasData = true
-                    self.forecast = forecast
-                    self.updateFavoriteStatusOfForecast()
-                    print("Forecast fetch successful for favorite location")
-                }
+                updateForecast(forecast)
+                print("Forecast fetch successful for favorite location")
             } catch {
                 DispatchQueue.main.async {
                     self.errorMessage = error.localizedDescription
                     print("Error getting weather for favorite location: \(error.localizedDescription)")
                 }
             }
+        }
+    }
+
+    private func updateForecast(_ newForecast: Forecast) {
+        DispatchQueue.main.async {
+            self.hasData = true
+            self.forecast = newForecast
+            self.updateFavoriteStatusOfForecast()
+            self.forecast.updateSelfInFavorites(&self.favoriteForecasts)
         }
     }
 
