@@ -68,6 +68,26 @@ class WeatherVM {
         }
     }
 
+    func getWeatherForFavorite(_ forecast: Forecast) async {
+        isConnected = await WeatherNetworkService.isConnectedToInternet()
+        if isConnected {
+            do {
+                let forecast = try await WeatherNetworkService.getForecast(for: forecast.coordinates, locationInput: forecast.locationInput)
+                DispatchQueue.main.async {
+                    self.hasData = true
+                    self.forecast = forecast
+                    self.updateFavoriteStatusOfForecast()
+                    print("Forecast fetch successful for favorite location")
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    self.errorMessage = error.localizedDescription
+                    print("Error getting weather for favorite location: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+
     func saveForecast() async {
         do {
             try await Forecast.save(forecast)

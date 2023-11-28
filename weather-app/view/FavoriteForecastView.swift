@@ -9,13 +9,13 @@ import SwiftUI
 
 struct FavoriteForecastView: View {
     @Environment(WeatherVM.self) var weatherVM
+    @Binding var selectedTab: Int
 
     var body: some View {
         ForEach(weatherVM.favoriteForecasts, id: \.id) { favorite in
             HStack(alignment: .top) {
                 VStack(alignment: .leading, spacing: 4) {
                     Text("\(favorite.locationInput)").font(.title2).fontWeight(.bold)
-//                    Spacer()
                     Text("\(favorite.hourly[0].symbol.description)")
                         .opacity(0.8)
                 }
@@ -24,9 +24,7 @@ struct FavoriteForecastView: View {
                     Text("\(favorite.hourly[0].temperature, specifier: "%0.1f")°")
                         .font(.system(size: 18))
                         .fontWeight(.bold)
-//                    Spacer()
                     Image(systemName: favorite.hourly[0].symbol.iconName)
-//                        .imageScale(.large)
                         .scaledToFit()
                         .symbolRenderingMode(.palette)
                         .foregroundStyle(.teal, .yellow)
@@ -37,11 +35,17 @@ struct FavoriteForecastView: View {
             .padding(18)
             .background(Color(red: 0.468, green: 0.588, blue: 0.879), in: RoundedRectangle(cornerRadius: 16))
             .frame(maxWidth: .infinity, alignment: .leading)
+            .onTapGesture {
+                selectedTab = 0
+                Task {
+                    await weatherVM.getWeatherForFavorite(favorite)
+                }
+            }
         }
     }
 }
 
 #Preview {
-    FavoriteForecastView()
+    FavoriteForecastView(selectedTab: .constant(1))
         .environment(WeatherVM(sampleData: Forecast.sampleData, sampleFavorites: Forecast.sampleFavorites))
 }

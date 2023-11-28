@@ -9,6 +9,7 @@ import SwiftUI
 
 struct FavoritesView: View {
     @Environment(WeatherVM.self) var weatherVM
+    @Binding var selectedTab: Int
 
     var body: some View {
         VStack(spacing: 0) {
@@ -21,7 +22,7 @@ struct FavoritesView: View {
                     Text("Favorites").font(.largeTitle).fontWeight(.bold).padding(.bottom)
 
                     if !weatherVM.favoriteForecasts.isEmpty {
-                        FavoriteForecastView()
+                        FavoriteForecastView(selectedTab: $selectedTab)
 
                     } else {
                         Text("No favorite places exist. Add one by pressing ⭐️ next to the location in the ")
@@ -40,6 +41,6 @@ struct FavoritesView: View {
 }
 
 #Preview {
-    FavoritesView()
+    FavoritesView(selectedTab: .constant(1))
         .environment(WeatherVM(sampleData: Forecast.sampleData, sampleFavorites: Forecast.sampleFavorites))
 }
