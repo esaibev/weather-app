@@ -111,6 +111,9 @@ extension Forecast {
     mutating func addFavorite(to favorites: inout [Forecast]) {
         self.isFavorite = true
         favorites.append(self)
+        favorites.sort(by: {
+            $0.locationInput < $1.locationInput
+        })
     }
 
     mutating func setFavorite() {
