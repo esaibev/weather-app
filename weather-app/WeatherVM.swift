@@ -72,6 +72,8 @@ class WeatherVM {
                     print("Error getting weather for favorite location: \(error.localizedDescription)")
                 }
             }
+        } else {
+            updateForecast(forecast)
         }
     }
 
