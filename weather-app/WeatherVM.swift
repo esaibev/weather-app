@@ -17,8 +17,8 @@ class WeatherVM {
     var hasData = false
 
     init() {
+        setupNetworkMonitoring()
         Task {
-            self.isConnected = await WeatherNetworkService.isConnectedToInternet()
             if await loadForecast() {
                 self.hasData = true
                 if isConnected {
@@ -29,8 +29,16 @@ class WeatherVM {
         }
     }
 
+    private func setupNetworkMonitoring() {
+        WeatherNetworkService.networkStatusChanged = { [weak self] isConnected in
+            DispatchQueue.main.async {
+                self?.isConnected = isConnected
+            }
+        }
+        WeatherNetworkService.startMonitoringNetwork()
+    }
+
     func getWeatherForLocation(_ location: String) async {
-        isConnected = await WeatherNetworkService.isConnectedToInternet()
         if isConnected {
             do {
                 let coordinates = try await WeatherNetworkService.getCoordinates(for: location)
@@ -60,7 +68,6 @@ class WeatherVM {
     }
 
     func getWeatherForFavorite(_ forecast: Forecast) async {
-        isConnected = await WeatherNetworkService.isConnectedToInternet()
         if isConnected {
             do {
                 let forecast = try await WeatherNetworkService.getForecast(for: forecast.coordinates, locationInput: forecast.locationInput)

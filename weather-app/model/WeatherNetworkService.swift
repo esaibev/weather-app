@@ -14,18 +14,17 @@ private struct GeocodeResult: Codable {
 }
 
 enum WeatherNetworkService {
-    static func isConnectedToInternet() async -> Bool {
-        return await withCheckedContinuation { continuation in
-            let monitor = NWPathMonitor()
-            monitor.pathUpdateHandler = { path in
-                let isConnected = path.status == .satisfied
-                continuation.resume(returning: isConnected)
-                monitor.cancel()
-            }
+    static var networkStatusChanged: ((Bool) -> Void)?
 
-            let queue = DispatchQueue(label: "NetworkMonitor")
-            monitor.start(queue: queue)
+    static func startMonitoringNetwork() {
+        let monitor = NWPathMonitor()
+        monitor.pathUpdateHandler = { path in
+            DispatchQueue.main.async {
+                networkStatusChanged?(path.status == .satisfied)
+            }
         }
+        let queue = DispatchQueue(label: "NetworkMonitor")
+        monitor.start(queue: queue)
     }
 
     static func getCoordinates(for location: String) async throws -> Coordinates {
