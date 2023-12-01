@@ -21,10 +21,6 @@ class WeatherVM {
         Task {
             if await loadForecast() {
                 self.hasData = true
-                if isConnected {
-                    let coordinates = forecast.coordinates
-                    await getWeatherAtCoordinates(coordinates)
-                }
             }
         }
     }
@@ -32,7 +28,13 @@ class WeatherVM {
     private func setupNetworkMonitoring() {
         WeatherNetworkService.networkStatusChanged = { [weak self] isConnected in
             DispatchQueue.main.async {
-                self?.isConnected = isConnected
+                guard let self = self else { return }
+                self.isConnected = isConnected
+                if isConnected {
+                    Task {
+                        await self.getWeatherAtCoordinates(self.forecast.coordinates)
+                    }
+                }
             }
         }
         WeatherNetworkService.startMonitoringNetwork()
