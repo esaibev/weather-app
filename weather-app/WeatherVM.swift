@@ -19,9 +19,7 @@ class WeatherVM {
     init() {
         setupNetworkMonitoring()
         Task {
-            if await loadForecast() {
-                self.hasData = true
-            }
+            await loadForecast()
         }
     }
 
@@ -30,7 +28,7 @@ class WeatherVM {
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 self.isConnected = isConnected
-                if isConnected {
+                if isConnected && !self.forecast.locationInput.isEmpty {
                     Task {
                         await self.getWeatherAtCoordinates(self.forecast.coordinates)
                     }
@@ -110,6 +108,7 @@ class WeatherVM {
             forecast = try await Forecast.load()
             favoriteForecasts = try await Forecast.loadFavorites()
             updateFavoriteStatusOfForecast()
+            hasData = true
 
             print("Forecast data loaded successfully")
             return true
@@ -132,7 +131,6 @@ class WeatherVM {
         if forecast.isFavorite(favoriteForecasts) {
             forecast.setFavorite()
         }
-        print("Status: \(forecast.isFavorite)")
     }
 
     func saveFavorites() async {
