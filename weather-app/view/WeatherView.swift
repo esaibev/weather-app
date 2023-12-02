@@ -63,6 +63,11 @@ struct WeatherView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
             }
+            .refreshable {
+                if weatherVM.hasData {
+                    await weatherVM.getWeatherAtCoordinates(weatherVM.forecast.coordinates)
+                }
+            }
         }
         .frame(maxWidth: .infinity)
         .background(Color(red: 0.378, green: 0.49, blue: 0.757))

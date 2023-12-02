@@ -28,7 +28,7 @@ class WeatherVM {
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 self.isConnected = isConnected
-                if isConnected, !self.forecast.locationInput.isEmpty {
+                if self.isConnected, !self.forecast.locationInput.isEmpty {
                     Task {
                         await self.getWeatherAtCoordinates(self.forecast.coordinates)
                     }
@@ -54,15 +54,17 @@ class WeatherVM {
         }
     }
 
-    private func getWeatherAtCoordinates(_ coordinates: Coordinates) async {
-        do {
-            let forecast = try await WeatherNetworkService.getForecast(for: coordinates, locationInput: forecast.locationInput)
-            updateForecast(forecast)
-            print("Forecast fetch successful for coordinates")
-        } catch {
-            DispatchQueue.main.async {
-                self.errorMessage = error.localizedDescription
-                print("Error getting weather for location: \(error.localizedDescription)")
+    func getWeatherAtCoordinates(_ coordinates: Coordinates) async {
+        if isConnected {
+            do {
+                let forecast = try await WeatherNetworkService.getForecast(for: coordinates, locationInput: forecast.locationInput)
+                updateForecast(forecast)
+                print("Forecast fetch successful for coordinates")
+            } catch {
+                DispatchQueue.main.async {
+                    self.errorMessage = error.localizedDescription
+                    print("Error getting weather for location: \(error.localizedDescription)")
+                }
             }
         }
     }
