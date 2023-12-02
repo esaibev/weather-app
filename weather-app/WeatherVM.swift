@@ -13,7 +13,7 @@ class WeatherVM {
     var errorMessage: String?
     var forecast: Forecast = .init(approvedTime: "", locationInput: "", coordinates: Coordinates(lat: 59.33, lon: 18.07), hourly: [], daily: [], isFavorite: false)
     var favoriteForecasts: [Forecast] = []
-    var isConnected = false
+    var isConnected = true
     var hasData = false
 
     init() {
@@ -28,7 +28,7 @@ class WeatherVM {
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 self.isConnected = isConnected
-                if isConnected && !self.forecast.locationInput.isEmpty {
+                if isConnected, !self.forecast.locationInput.isEmpty {
                     Task {
                         await self.getWeatherAtCoordinates(self.forecast.coordinates)
                     }
