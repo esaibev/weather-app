@@ -10,6 +10,7 @@
 		662617512B15FE8100CB28C1 /* FavoriteForecastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 662617502B15FE8100CB28C1 /* FavoriteForecastView.swift */; };
 		663E02B62B0E34F000B4D011 /* DailyForecastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663E02B52B0E34F000B4D011 /* DailyForecastView.swift */; };
 		663E02B82B0E5DD500B4D011 /* WeatherSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 663E02B72B0E5DD500B4D011 /* WeatherSymbol.swift */; };
+		663FA6FE2BBD61F200AA7DAF /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 663FA6FD2BBD61F200AA7DAF /* README.md */; };
 		66718A652B13533F007AC40A /* HourlyForecastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66718A642B13533F007AC40A /* HourlyForecastView.swift */; };
 		668BE8722B12354A00EB6D1E /* NoConnectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 668BE8712B12354A00EB6D1E /* NoConnectionView.swift */; };
 		669430E72B0B793A0063EA98 /* WeatherApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 669430E62B0B793A0063EA98 /* WeatherApp.swift */; };
@@ -28,6 +29,7 @@
 		662617502B15FE8100CB28C1 /* FavoriteForecastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteForecastView.swift; sourceTree = "<group>"; };
 		663E02B52B0E34F000B4D011 /* DailyForecastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyForecastView.swift; sourceTree = "<group>"; };
 		663E02B72B0E5DD500B4D011 /* WeatherSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherSymbol.swift; sourceTree = "<group>"; };
+		663FA6FD2BBD61F200AA7DAF /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		66718A642B13533F007AC40A /* HourlyForecastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyForecastView.swift; sourceTree = "<group>"; };
 		668BE8712B12354A00EB6D1E /* NoConnectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoConnectionView.swift; sourceTree = "<group>"; };
 		669430E32B0B793A0063EA98 /* weather-app.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "weather-app.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -58,6 +60,7 @@
 			isa = PBXGroup;
 			children = (
 				669430E52B0B793A0063EA98 /* weather-app */,
+				663FA6FD2BBD61F200AA7DAF /* README.md */,
 				669430E42B0B793A0063EA98 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -174,6 +177,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				663FA6FE2BBD61F200AA7DAF /* README.md in Resources */,
 				669430EE2B0B793B0063EA98 /* Preview Assets.xcassets in Resources */,
 				669430EB2B0B793B0063EA98 /* Assets.xcassets in Resources */,
 			);
